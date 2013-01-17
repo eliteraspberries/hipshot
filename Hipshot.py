@@ -1,7 +1,10 @@
 #!/usr/bin/env python
 
 import cv
-from os import EX_DATAERR, EX_NOINPUT, EX_USAGE
+try:
+    from os import EX_DATAERR, EX_NOINPUT, EX_USAGE
+except ImportError:
+    EX_DATAERR, EX_NOINPUT, EX_USAGE = 1, 2, 3
 from os.path import basename, exists, splitext
 from random import randint
 from sys import argv, exit, float_info, stderr
