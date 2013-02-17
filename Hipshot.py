@@ -37,6 +37,8 @@ if '__main__' in __name__:
             exit(EX_NOINPUT)
     elif len(argv) == 3:
         file = argv[1]
+        if not exists(file):
+            exit(EX_NOINPUT)
         try:
             alpha = float(argv[2])
         except ValueError:
