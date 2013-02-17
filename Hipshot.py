@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# Copyright 2013, Mansour Moufid <mansourmoufid@gmail.com>
 
 import cv
 try:
