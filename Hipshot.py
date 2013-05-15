@@ -39,7 +39,7 @@ def num_frames(video_file):
     '''
     cap = cv.CaptureFromFile(video_file)
     if not cap:
-        _exit(_EX_DATAERR)
+        raise IOError(video_file)
     n = cv.GetCaptureProperty(cap, cv.CV_CAP_PROP_FRAME_COUNT)
     return int(n)
 
@@ -48,7 +48,7 @@ def get_frames(video_file):
     '''
     cap = cv.CaptureFromFile(video_file)
     if not cap:
-        _exit(_EX_DATAERR)
+        raise IOError(video_file)
     i = 0
     while i < num_frames(video_file):
         img = cv.QueryFrame(cap)
@@ -96,14 +96,15 @@ if '__main__' in __name__:
     else:
         _fail(_EX_USAGE)
 
-    frames = get_frames(file)
-
-    cv.NamedWindow('Hipshot', flags = cv.CV_WINDOW_AUTOSIZE)
-
     try:
         alpha
     except NameError:
         alpha = 5e-3 / num_frames(file)
-    long_exp_img = merge(frames, alpha, display='Hipshot')
 
-    _save_image(long_exp_img, file)
+    try:
+        frames = get_frames(file)
+        cv.NamedWindow('Hipshot', flags = cv.CV_WINDOW_AUTOSIZE)
+        long_exp_img = merge(frames, alpha, display='Hipshot')
+        _save_image(long_exp_img, file)
+    except IOError:
+        _exit(_EX_DATAERR)
