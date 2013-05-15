@@ -8,7 +8,7 @@ try:
     from os import EX_USAGE as _EX_USAGE
 except ImportError:
     _EX_DATAERR, _EX_NOINPUT, _EX_USAGE = 1, 2, 3
-from os.path import basename, exists, splitext
+from os.path import exists, splitext
 from random import randint
 from sys import argv as _argv, exit as _exit, stderr as _stderr
 from sys import float_info as _float_info
