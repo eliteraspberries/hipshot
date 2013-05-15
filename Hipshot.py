@@ -13,26 +13,30 @@ from random import randint
 from sys import argv as _argv, exit as _exit, stderr as _stderr
 from sys import float_info as _float_info
 
+
 def _template_image(image, depth):
     size = (image.width, image.height)
     channels = image.nChannels
     dup = cv.CreateImage(size, depth, channels)
     return dup
 
+
 def _save_image(image, file):
     while True:
         newfile = splitext(file)[0] + '-'
-        newfile = newfile + str(randint(0,1000)) + '.png'
+        newfile = newfile + str(randint(0, 1000)) + '.png'
         if not exists(newfile):
             break
     newimage = _template_image(image, cv.IPL_DEPTH_8U)
-    cv.ConvertScaleAbs(image, newimage, scale = 255)
+    cv.ConvertScaleAbs(image, newimage, scale=255)
     cv.SaveImage(newfile, newimage)
     return
+
 
 def _fail(code):
     print>>_stderr, 'usage: Hipshot.py <file> [alpha]'
     _exit(code)
+
 
 def num_frames(video_file):
     '''Return the number of frames in a video file.
@@ -42,6 +46,7 @@ def num_frames(video_file):
         raise IOError(video_file)
     n = cv.GetCaptureProperty(cap, cv.CV_CAP_PROP_FRAME_COUNT)
     return int(n)
+
 
 def get_frames(video_file):
     '''Return a list of individual frames in a video file.
@@ -56,6 +61,7 @@ def get_frames(video_file):
             break
         yield img
         i += 1
+
 
 def merge(frames, alpha, display=None):
     '''Average a list of frames with a weight factor of alpha,
@@ -77,6 +83,7 @@ def merge(frames, alpha, display=None):
                 _save_image(acc, file)
     return acc
 
+
 if '__main__' in __name__:
     if len(_argv) == 2:
         file = _argv[1]
@@ -90,8 +97,8 @@ if '__main__' in __name__:
             alpha = float(_argv[2])
         except ValueError:
             _fail(_EX_USAGE)
-        if alpha <= 10.0 * _float_info.epsilon or \
-            alpha >= 1.0 - 10.0 * _float_info.epsilon:
+        if (alpha <= 10.0 * _float_info.epsilon or
+                alpha >= 1.0 - 10.0 * _float_info.epsilon):
             _fail(_EX_USAGE)
     else:
         _fail(_EX_USAGE)
@@ -103,7 +110,7 @@ if '__main__' in __name__:
 
     try:
         frames = get_frames(file)
-        cv.NamedWindow('Hipshot', flags = cv.CV_WINDOW_AUTOSIZE)
+        cv.NamedWindow('Hipshot', flags=cv.CV_WINDOW_AUTOSIZE)
         long_exp_img = merge(frames, alpha, display='Hipshot')
         _save_image(long_exp_img, file)
     except IOError:
