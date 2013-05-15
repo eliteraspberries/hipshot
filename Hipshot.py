@@ -34,6 +34,25 @@ def _fail(code):
     print>>_stderr, 'usage: Hipshot.py <file> [alpha]'
     _exit(code)
 
+def num_frames(video_file):
+    cap = cv.CaptureFromFile(video_file)
+    if not cap:
+        _exit(_EX_DATAERR)
+    n = cv.GetCaptureProperty(cap, cv.CV_CAP_PROP_FRAME_COUNT)
+    return int(n)
+
+def get_frames(video_file):
+    cap = cv.CaptureFromFile(video_file)
+    if not cap:
+        _exit(_EX_DATAERR)
+    i = 0
+    while i < num_frames(video_file):
+        img = cv.QueryFrame(cap)
+        if not img:
+            break
+        yield img
+        i += 1
+
 if '__main__' in __name__:
     if len(_argv) == 2:
         file = _argv[1]
@@ -53,23 +72,18 @@ if '__main__' in __name__:
     else:
         _fail(_EX_USAGE)
 
-    cap = cv.CaptureFromFile(file)
-    if not cap:
-        _exit(_EX_DATAERR)
-    img = cv.QueryFrame(cap)
-    if not img:
-        _exit(_EX_DATAERR)
-    acc = _template_image(img, cv.IPL_DEPTH_32F)
+    frames = get_frames(file)
 
     cv.NamedWindow('Hipshot', flags = cv.CV_WINDOW_AUTOSIZE)
 
-    n = cv.GetCaptureProperty(cap, cv.CV_CAP_PROP_FRAME_COUNT)
-    n = int(n)
     try:
         alpha
     except NameError:
-        alpha = 5e-3 / n
-    for i in xrange(1, n):
+        alpha = 5e-3 / num_frames(file)
+    acc = None
+    for frame in frames:
+        if not acc:
+            acc = _template_image(frame, cv.IPL_DEPTH_32F)
         cv.ShowImage('Hipshot', acc)
         k = cv.WaitKey(1)
         if k == ord('q'):
@@ -78,9 +92,6 @@ if '__main__' in __name__:
             cv.SetZero(acc)
         elif k == ord('s'):
             _save_image(acc, file)
-        img = cv.QueryFrame(cap)
-        if not img:
-            break
-        cv.RunningAvg(img, acc, alpha)
+        cv.RunningAvg(frame, acc, alpha)
 
     _save_image(acc, file)
