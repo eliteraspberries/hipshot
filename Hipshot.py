@@ -35,6 +35,8 @@ def _fail(code):
     _exit(code)
 
 def num_frames(video_file):
+    '''Return the number of frames in a video file.
+    '''
     cap = cv.CaptureFromFile(video_file)
     if not cap:
         _exit(_EX_DATAERR)
@@ -42,6 +44,8 @@ def num_frames(video_file):
     return int(n)
 
 def get_frames(video_file):
+    '''Return a list of individual frames in a video file.
+    '''
     cap = cv.CaptureFromFile(video_file)
     if not cap:
         _exit(_EX_DATAERR)
@@ -54,6 +58,9 @@ def get_frames(video_file):
         i += 1
 
 def merge(frames, alpha, display=None):
+    '''Average a list of frames with a weight factor of alpha,
+    and optionally display the process in an OpenCV NamedWindow.
+    '''
     acc = None
     for frame in frames:
         if not acc:
