@@ -10,19 +10,19 @@ from os.path import basename, exists, splitext
 from random import randint
 from sys import argv, exit, float_info, stderr
 
-def TemplateImage(image, depth):
+def template_image(image, depth):
     size = (image.width, image.height)
     channels = image.nChannels
     dup = cv.CreateImage(size, depth, channels)
     return dup
 
-def SaveImage(image, file):
+def save_image(image, file):
     while True:
         newfile = splitext(file)[0] + '-'
         newfile = newfile + str(randint(0,1000)) + '.png'
         if not exists(newfile):
             break
-    newimage = TemplateImage(image, cv.IPL_DEPTH_8U)
+    newimage = template_image(image, cv.IPL_DEPTH_8U)
     cv.ConvertScaleAbs(image, newimage, scale = 255)
     cv.SaveImage(newfile, newimage)
     return
@@ -56,7 +56,7 @@ if '__main__' in __name__:
     img = cv.QueryFrame(cap)
     if not img:
         exit(EX_DATAERR)
-    acc = TemplateImage(img, cv.IPL_DEPTH_32F)
+    acc = template_image(img, cv.IPL_DEPTH_32F)
 
     cv.NamedWindow('Hipshot', flags = cv.CV_WINDOW_AUTOSIZE)
 
@@ -74,10 +74,10 @@ if '__main__' in __name__:
         elif k == ord('z'):
             cv.SetZero(acc)
         elif k == ord('s'):
-            SaveImage(acc, file)
+            save_image(acc, file)
         img = cv.QueryFrame(cap)
         if not img:
             break
         cv.RunningAvg(img, acc, alpha)
 
-    SaveImage(acc, file)
+    save_image(acc, file)
