@@ -53,6 +53,23 @@ def get_frames(video_file):
         yield img
         i += 1
 
+def merge(frames, alpha, display=None):
+    acc = None
+    for frame in frames:
+        if not acc:
+            acc = _template_image(frame, cv.IPL_DEPTH_32F)
+        cv.RunningAvg(frame, acc, alpha)
+        if display:
+            cv.ShowImage(display, acc)
+            k = cv.WaitKey(1)
+            if k == ord('q'):
+                break
+            elif k == ord('z'):
+                cv.SetZero(acc)
+            elif k == ord('s'):
+                _save_image(acc, file)
+    return acc
+
 if '__main__' in __name__:
     if len(_argv) == 2:
         file = _argv[1]
@@ -80,18 +97,6 @@ if '__main__' in __name__:
         alpha
     except NameError:
         alpha = 5e-3 / num_frames(file)
-    acc = None
-    for frame in frames:
-        if not acc:
-            acc = _template_image(frame, cv.IPL_DEPTH_32F)
-        cv.ShowImage('Hipshot', acc)
-        k = cv.WaitKey(1)
-        if k == ord('q'):
-            break
-        elif k == ord('z'):
-            cv.SetZero(acc)
-        elif k == ord('s'):
-            _save_image(acc, file)
-        cv.RunningAvg(frame, acc, alpha)
+    long_exp_img = merge(frames, alpha, display='Hipshot')
 
-    _save_image(acc, file)
+    _save_image(long_exp_img, file)
