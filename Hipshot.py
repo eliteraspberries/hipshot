@@ -1,5 +1,11 @@
 #!/usr/bin/env python2
-# Copyright 2013, Mansour Moufid <mansourmoufid@gmail.com>
+
+'''Simulate long-exposure photography
+
+Hipshot converts a video file into a single image file simulating
+a long-exposure photograph.
+'''
+
 
 import cv
 try:
