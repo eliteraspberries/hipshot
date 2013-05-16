@@ -20,6 +20,14 @@ from sys import argv as _argv, exit as _exit, stderr as _stderr
 from sys import float_info as _float_info
 
 
+__author__ = 'Mansour Moufid'
+__copyright__ = 'Copyright 2013, Mansour Moufid'
+__license__ = 'ISC'
+__version__ = '0.1'
+__email__ = 'mansourmoufid@gmail.com'
+__status__ = 'Development'
+
+
 def _template_image(image, depth):
     size = (image.width, image.height)
     channels = image.nChannels
