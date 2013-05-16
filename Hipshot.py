@@ -44,6 +44,7 @@ def _save_image(image, file):
     newimage = _template_image(image, cv.IPL_DEPTH_8U)
     cv.ConvertScaleAbs(image, newimage, scale=255)
     cv.SaveImage(newfile, newimage)
+    print newfile
     return
 
 
