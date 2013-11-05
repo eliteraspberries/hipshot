@@ -90,6 +90,7 @@ def merge(frames, alpha, display=None):
         if display:
             cv.ShowImage(display, acc)
             k = cv.WaitKey(1)
+            k = k & 255
             if k == ord('q'):
                 break
             elif k == ord('z'):
