@@ -1,9 +1,14 @@
 #!/usr/bin/env python2
 
-'''Simulate long-exposure photography
+'''Hipshot - Simulate long-exposure photography
 
-Hipshot converts a video file into a single image file simulating
-a long-exposure photograph.
+Usage:
+    hipshot <file> [--weight <alpha>]
+
+Options:
+    -w, --weight    Average 1frames with the specified weight.
+    -v, --version   Print version information.
+    -h, --help      Print this help.
 '''
 
 
@@ -14,18 +19,13 @@ try:
     from os import EX_USAGE as _EX_USAGE
 except ImportError:
     _EX_DATAERR, _EX_NOINPUT, _EX_USAGE = 1, 2, 3
+from docopt import docopt
 from os.path import exists, splitext
 from random import randint
-from sys import argv as _argv, exit as _exit, stderr as _stderr
+from sys import exit as _exit, stderr as _stderr
 from sys import float_info as _float_info
 
-
-__author__ = 'Mansour Moufid'
-__copyright__ = 'Copyright 2013, Mansour Moufid'
-__license__ = 'ISC'
-__version__ = '0.2'
-__email__ = 'mansourmoufid@gmail.com'
-__status__ = 'Development'
+import hipshot
 
 
 def _template_image(image, depth):
@@ -99,29 +99,27 @@ def merge(frames, alpha, display=None):
     return acc
 
 
+_long_version = 'Hipshot ' + hipshot.__version__
+
+
 if '__main__' in __name__:
-    if len(_argv) == 2:
-        file = _argv[1]
-        if not exists(file):
-            _exit(_EX_NOINPUT)
-    elif len(_argv) == 3:
-        file = _argv[1]
-        if not exists(file):
-            _exit(_EX_NOINPUT)
+
+    arguments = docopt(__doc__, version=_long_version)
+
+    file = arguments['<file>']
+    if not exists(file):
+        _exit(_EX_NOINPUT)
+
+    if arguments['--weight']:
         try:
-            alpha = float(_argv[2])
+            alpha = float(arguments['<alpha>'])
         except ValueError:
             _fail(_EX_USAGE)
-        if (alpha <= 10.0 * _float_info.epsilon or
-                alpha >= 1.0 - 10.0 * _float_info.epsilon):
-            _fail(_EX_USAGE)
     else:
-        _fail(_EX_USAGE)
-
-    try:
-        alpha
-    except NameError:
         alpha = 5e-3 / num_frames(file)
+    if (alpha <= 10.0 * _float_info.epsilon or
+            alpha >= 1.0 - 10.0 * _float_info.epsilon):
+        _fail(_EX_USAGE)
 
     try:
         frames = get_frames(file)
