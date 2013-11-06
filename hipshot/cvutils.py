@@ -10,7 +10,7 @@ from numpy import int8, int16, int32, int64
 from numpy import uint8, uint16, uint32, uint64
 from os.path import exists as _exists
 
-import utils
+from . import utils
 
 
 # Map of OpenCV image depths to NumPy array types

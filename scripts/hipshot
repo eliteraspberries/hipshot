@@ -24,8 +24,7 @@ from os.path import exists
 from sys import exit as _exit, stderr as _stderr
 from sys import float_info as _float_info
 
-import cvutils
-import hipshot
+from hipshot import cvutils, hipshot
 
 
 def _fail(code):
