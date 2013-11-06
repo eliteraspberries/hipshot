@@ -27,11 +27,6 @@ from sys import float_info as _float_info
 from hipshot import cvutils, hipshot
 
 
-def _fail(code):
-    print>>_stderr, 'usage: Hipshot.py <file> [alpha]'
-    _exit(code)
-
-
 def merge(frames, alpha, display=None):
     '''Average a list of frames with a weight factor of alpha,
     and optionally display the process in an OpenCV NamedWindow.
@@ -63,18 +58,21 @@ if '__main__' in __name__:
 
     file = arguments['<file>']
     if not exists(file):
+        print>>_stderr, 'error: file does not exist:', file
         _exit(_EX_NOINPUT)
 
     if arguments['--weight']:
         try:
             alpha = float(arguments['<alpha>'])
         except ValueError:
-            _fail(_EX_USAGE)
+            print>>_stderr, 'error: alpha value must be a float'
+            _exit(_EX_USAGE)
     else:
         alpha = 5e-3 / cvutils.num_frames(file)
     if (alpha <= 10.0 * _float_info.epsilon or
             alpha >= 1.0 - 10.0 * _float_info.epsilon):
-        _fail(_EX_USAGE)
+        print>>_stderr, 'error: alpha value must be between 0 and 1'
+        _exit(_EX_USAGE)
 
     try:
         frames = cvutils.get_frames(file, as_array=False)
@@ -82,4 +80,5 @@ if '__main__' in __name__:
         long_exp_img = merge(frames, alpha, display='Hipshot')
         print cvutils._save_image(long_exp_img, file, random=True)
     except IOError:
+        print>>_stderr, 'error: could not read or write file(s)'
         _exit(_EX_DATAERR)
