@@ -1,6 +1,6 @@
 #!/usr/bin/env python2
 
-'''Hipshot converts a video file into a single image file
+'''Hipshot converts a video file into a single image
 simulating a long-exposure photograph.
 '''
 
