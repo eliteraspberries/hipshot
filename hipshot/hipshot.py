@@ -7,7 +7,7 @@ simulating a long-exposure photograph.
 __author__ = 'Mansour Moufid'
 __copyright__ = 'Copyright 2013, Mansour Moufid'
 __license__ = 'ISC'
-__version__ = '0.3'
+__version__ = '0.4'
 __email__ = 'mansourmoufid@gmail.com'
 __status__ = 'Development'
 
