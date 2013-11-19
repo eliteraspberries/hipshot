@@ -6,7 +6,7 @@ Usage:
     hipshot <file> [--weight <alpha>]
 
 Options:
-    -w, --weight    Average 1frames with the specified weight.
+    -w, --weight    Sum frames with the specified weight.
     -v, --version   Print version information.
     -h, --help      Print this help.
 '''
