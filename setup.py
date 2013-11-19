@@ -16,7 +16,7 @@ _classifiers = [
     'Topic :: Multimedia :: Video',
 ]
 
-with open('README', 'r') as file:
+with open('README.rst', 'r') as file:
     _long_description = file.read()
 
 _setup_args = {
