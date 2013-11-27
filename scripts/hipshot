@@ -4,11 +4,13 @@
 
 Usage:
     hipshot <file> [--weight <alpha>]
+    hipshot -h | --help
+    hipshot -v | --version
 
 Options:
     -w, --weight    Sum frames with the specified weight.
-    -v, --version   Print version information.
     -h, --help      Print this help.
+    -v, --version   Print version information.
 '''
 
 
