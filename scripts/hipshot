@@ -29,28 +29,6 @@ from sys import float_info as _float_info
 from hipshot import cvutils, hipshot
 
 
-def merge(frames, alpha, display=None):
-    '''Average a list of frames with a weight factor of alpha,
-    and optionally display the process in an OpenCV NamedWindow.
-    '''
-    acc = None
-    for frame in frames:
-        if not acc:
-            acc = cvutils._template_image(frame, cv.IPL_DEPTH_32F)
-        cv.RunningAvg(frame, acc, alpha)
-        if display:
-            cv.ShowImage(display, acc)
-            k = cv.WaitKey(1)
-            k = k & 255
-            if k == ord('q'):
-                break
-            elif k == ord('z'):
-                cv.SetZero(acc)
-            elif k == ord('s'):
-                print cvutils._save_image(acc, file, random=True)
-    return acc
-
-
 _long_version = 'Hipshot ' + hipshot.__version__
 
 
@@ -79,7 +57,7 @@ if '__main__' in __name__:
     try:
         frames = cvutils.get_frames(file, as_array=False)
         cv.NamedWindow('Hipshot', flags=cv.CV_WINDOW_AUTOSIZE)
-        long_exp_img = merge(frames, alpha, display='Hipshot')
+        long_exp_img = hipshot.merge(frames, alpha, display='Hipshot')
         print cvutils._save_image(long_exp_img, file, random=True)
     except IOError:
         print>>_stderr, 'error: could not read or write file(s)'
