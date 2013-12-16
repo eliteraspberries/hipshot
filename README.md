@@ -42,3 +42,16 @@ which specifies the weighing factor for each frame in the sum.
         -w, --weight    Sum frames with the specified weight.
         -v, --version   Print version information.
         -h, --help      Print this help.
+
+
+Example
+=======
+
+The following image was created from the video:
+[ISS Near Aurora Borealis][iss-video].
+
+![][iss-image]
+
+
+[iss-image]: http://www.eliteraspberries.com/images/iss-borealis.png
+[iss-video]: <http://www.youtube.com/watch?v=uYBYIhH4nsg>

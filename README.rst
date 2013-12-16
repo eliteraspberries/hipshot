@@ -47,3 +47,14 @@ which specifies the weighing factor for each frame in the sum.
         -v, --version   Print version information.
         -h, --help      Print this help.
 
+Example
+=======
+
+The following image was created from the video: `ISS Near
+Aurora Borealis <http://www.youtube.com/watch?v=uYBYIhH4nsg>`_.
+
+.. figure:: http://www.eliteraspberries.com/images/iss-borealis.png
+   :align: center
+   :alt: 
+
+
