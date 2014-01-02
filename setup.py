@@ -27,7 +27,7 @@ _setup_args = {
     'license':          hipshot.__license__,
     'long_description': _long_description,
     'name':             'Hipshot',
-    'url':              'https://bitbucket.org/mansourm/hipshot',
+    'url':              'https://bitbucket.org/eliteraspberries/hipshot',
     'version':          hipshot.__version__,
 }
 
