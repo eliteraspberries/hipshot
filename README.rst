@@ -18,8 +18,8 @@ To install them,
 
 ::
 
-    gunzip < Hipshot-0.4.tar.gz | tar -xf -
-    cd Hipshot-0.4/
+    gunzip < Hipshot-0.4.1.tar.gz | tar -xf -
+    cd Hipshot-0.4.1/
     python setup.py install
 
 or with pip,
