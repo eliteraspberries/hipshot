@@ -17,11 +17,12 @@ __email__ = 'mansourmoufid@gmail.com'
 __status__ = 'Development'
 
 
-def merge(frames, alpha, display=None):
-    '''Average a list of frames with a weight factor of alpha,
-    and optionally display the process in an OpenCV NamedWindow.
+def merge(file, alpha, display=None):
+    '''Average the frames of a file with a weight of alpha,
+    optionally display the process in an OpenCV NamedWindow.
     '''
     acc = None
+    frames = cvutils.get_frames(file, as_array=False)
     for frame in frames:
         if not acc:
             acc = cvutils._template_image(frame, cv.IPL_DEPTH_32F)
@@ -36,7 +37,7 @@ def merge(frames, alpha, display=None):
                 cv.SetZero(acc)
             elif k == ord('s'):
                 print cvutils._save_image(acc, file, random=True)
-    return acc
+    return cvutils._save_image(acc, file, random=True)
 
 
 if __name__ == '__main__':

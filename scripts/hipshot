@@ -55,10 +55,8 @@ if '__main__' in __name__:
         _exit(_EX_USAGE)
 
     try:
-        frames = cvutils.get_frames(file, as_array=False)
         cv.NamedWindow('Hipshot', flags=cv.CV_WINDOW_AUTOSIZE)
-        long_exp_img = hipshot.merge(frames, alpha, display='Hipshot')
-        print cvutils._save_image(long_exp_img, file, random=True)
+        print hipshot.merge(file, alpha, display='Hipshot')
     except IOError:
         print>>_stderr, 'error: could not read or write file(s)'
         _exit(_EX_DATAERR)
