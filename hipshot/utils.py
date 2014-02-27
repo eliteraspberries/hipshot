@@ -23,12 +23,12 @@ def normalize(array):
     return
 
 
-def rand_filename(file, ext=None):
-    file_name, file_ext = splitext(file)
+def rand_filename(filename, ext=None):
+    base_name, file_ext = splitext(filename)
     if ext is None:
         ext = file_ext
     while True:
-        rand_file_name = file_name
+        rand_file_name = base_name
         rand_file_name += '-'
         rand_file_name += str(randint(0, 10000))
         rand_file_name += ext
