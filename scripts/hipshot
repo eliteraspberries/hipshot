@@ -16,47 +16,45 @@ Options:
 
 import cv
 try:
-    from os import EX_DATAERR as _EX_DATAERR
-    from os import EX_NOINPUT as _EX_NOINPUT
-    from os import EX_USAGE as _EX_USAGE
+    from os import EX_DATAERR, EX_NOINPUT, EX_USAGE
 except ImportError:
-    _EX_DATAERR, _EX_NOINPUT, _EX_USAGE = 1, 2, 3
+    EX_DATAERR, EX_NOINPUT, EX_USAGE = 1, 2, 3
 from docopt import docopt
 from os.path import exists
-from sys import exit as _exit, stderr as _stderr
-from sys import float_info as _float_info
+from sys import exit, stderr
+from sys import float_info
 
 from hipshot import cvutils, hipshot
 
 
-_long_version = 'Hipshot ' + hipshot.__version__
+long_version = 'Hipshot ' + hipshot.__version__
 
 
 if '__main__' in __name__:
 
-    arguments = docopt(__doc__, version=_long_version)
+    arguments = docopt(__doc__, version=long_version)
 
     file = arguments['<file>']
     if not exists(file):
-        print>>_stderr, 'error: file does not exist:', file
-        _exit(_EX_NOINPUT)
+        print>>stderr, 'error: file does not exist:', file
+        exit(EX_NOINPUT)
 
     if arguments['--weight']:
         try:
             alpha = float(arguments['<alpha>'])
         except ValueError:
-            print>>_stderr, 'error: alpha value must be a float'
-            _exit(_EX_USAGE)
+            print>>stderr, 'error: alpha value must be a float'
+            exit(EX_USAGE)
     else:
         alpha = 5e-3 / cvutils.num_frames(file)
-    if (alpha <= 10.0 * _float_info.epsilon or
-            alpha >= 1.0 - 10.0 * _float_info.epsilon):
-        print>>_stderr, 'error: alpha value must be between 0 and 1'
-        _exit(_EX_USAGE)
+    if (alpha <= 10.0 * float_info.epsilon or
+            alpha >= 1.0 - 10.0 * float_info.epsilon):
+        print>>stderr, 'error: alpha value must be between 0 and 1'
+        exit(EX_USAGE)
 
     try:
         cv.NamedWindow('Hipshot', flags=cv.CV_WINDOW_AUTOSIZE)
         print hipshot.merge(file, alpha, display='Hipshot')
     except IOError:
-        print>>_stderr, 'error: could not read or write file(s)'
-        _exit(_EX_DATAERR)
+        print>>stderr, 'error: could not read or write file(s)'
+        exit(EX_DATAERR)
