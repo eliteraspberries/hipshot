@@ -15,14 +15,13 @@ Options:
 
 
 import cv
+from docopt import docopt
 try:
     from os import EX_DATAERR, EX_NOINPUT, EX_USAGE
 except ImportError:
     EX_DATAERR, EX_NOINPUT, EX_USAGE = 1, 2, 3
-from docopt import docopt
 from os.path import exists
-from sys import exit, stderr
-from sys import float_info
+from sys import exit, float_info, stderr
 
 from hipshot import cvutils, hipshot
 
