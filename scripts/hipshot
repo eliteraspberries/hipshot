@@ -23,7 +23,8 @@ except ImportError:
 from os.path import exists
 from sys import exit, float_info, stderr
 
-from hipshot import cvutils, hipshot
+from avena import ocv
+from hipshot import hipshot
 
 
 long_version = 'Hipshot ' + hipshot.__version__
@@ -45,7 +46,7 @@ if '__main__' in __name__:
             print>>stderr, 'error: alpha value must be a float'
             exit(EX_USAGE)
     else:
-        alpha = 5e-3 / cvutils.num_frames(file)
+        alpha = 5e-3 / ocv.num_frames(file)
     eps = float_info.epsilon
     if alpha <= 10.0 * eps or alpha >= 1.0 - 10.0 * eps:
         print>>stderr, 'error: alpha value must be between 0 and 1'

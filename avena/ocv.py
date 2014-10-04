@@ -4,12 +4,10 @@
 
 
 from cv2 import cv
-from numpy import asarray, empty as _empty
-from numpy import float32, float64
-from numpy import int8, int16, int32, int64
-from numpy import uint8, uint16, uint32, uint64
+from numpy import asarray
 from os.path import exists as _exists
 
+from . import np
 from . import utils
 
 
@@ -25,27 +23,12 @@ _cv_depths = {
 }
 
 
-# Map of NumPy array type strings to types
-_np_dtypes = {
-    'int8':     int8,
-    'int16':    int16,
-    'int32':    int32,
-    'int64':    int64,
-    'uint8':    uint8,
-    'uint16':   uint16,
-    'uint32':   uint32,
-    'uint64':   uint64,
-    'float32':  float32,
-    'float64':  float64,
-}
-
-
 # Inverse mapping of the above
-_cv_depths_inv = dict((v, k) for k, v in _cv_depths.iteritems())
+_cv_depths_inv = utils._invert_dict(_cv_depths)
 
 
 # Map of colours to array indices
-RGB = {
+_OCV_RGB = {
     'B': 0,
     'G': 1,
     'R': 2,
@@ -62,23 +45,15 @@ def _template_image(image, depth):
     return dup
 
 
-DEFAULT_IMAGE_FILE_EXT = '.png'
-
-
-def _save_image(image, file, file_ext=None, random=False):
+def _save_image(image, filename, random=False, ext=None):
     '''Save an image object and return the file name.
-
-    The parameter 'file_ext' specifies the file extension and
-    format of the saved image.
 
     If the parameter 'random' is True, use a random file name.
     '''
-    if not file_ext:
-        file_ext = DEFAULT_IMAGE_FILE_EXT
     if random:
-        newfile = utils.rand_filename(file, ext=file_ext)
+        newfile = utils.rand_filename(filename, ext=ext)
     else:
-        newfile = file
+        newfile = filename
     newimage = _template_image(image, cv.IPL_DEPTH_8U)
     cv.ConvertScaleAbs(image, newimage, scale=255)
     cv.SaveImage(newfile, newimage)
@@ -102,14 +77,14 @@ def _cv_to_array(im, dtype=None):
     '''
     arr_data = im[:, :]
     arr_shape = (im.height, im.width, im.nChannels)
-    arr_dtype = _np_dtypes[_cv_depths[im.depth]]
+    arr_dtype = np._np_dtypes[_cv_depths[im.depth]]
     arr = asarray(arr_data, dtype=arr_dtype)
     arr.shape = arr_shape
     if not dtype:
         return arr
-    new_arr = _empty(arr.shape, dtype=dtype)
-    new_arr = arr.astype(_np_dtypes[dtype])
-    return new_arr
+    dtype = np._np_dtypes[dtype]
+    arr = np.from_uint8(arr, dtype=dtype)
+    return arr
 
 
 def _array_to_cv(arr):
@@ -128,22 +103,74 @@ def _array_to_cv(arr):
 DEFAULT_FRAME_ARRAY_DTYPE = 'float32'
 
 
-def get_frames(file, as_array=True, dtype=None, normal=False):
-    '''Return a list of individual frames in a video file.
+_CV_CAM_PROPERTIES = {
+    'width':    cv.CV_CAP_PROP_FRAME_WIDTH,
+    'height':   cv.CV_CAP_PROP_FRAME_HEIGHT,
+    'fps':      cv.CV_CAP_PROP_FPS,
+}
+
+DEFAULT_CAM_PROPERTY_RES = (640, 480)
+DEFAULT_CAM_PROPERTY_FPS = 15
+
+
+def _set_cam_properties(cap, props):
+    for p in props:
+        cv.SetCaptureProperty(
+            cap,
+            _CV_CAM_PROPERTIES[p],
+            props[p]
+        )
+
+
+def get_frames(video_file=None,
+               cam=-1, cam_res=None, cam_fps=None,
+               as_array=True, dtype=None):
+    '''Return a list of individual frames in a video file or
+    webcam stream.
+
+    If the parameter 'video_file' is None, frames are read
+    from the default webcam.
+
+    The optional parameter 'cam_res' specifies the webcam
+    resolution as a (width, height) tuple in pixels, the
+    default is (640, 480).
+
+    The optional parameter 'cam_fps' specifies the webcam
+    framerate in frames per second, the default is 15.
 
     If the parameter 'as_array' is True, return NumPy arrays.
     If dtype is specified, return NumPy arrays of that type.
-    If the parameter 'normal' is True, normalize the arrays.
     '''
 
     if dtype is None:
         dtype = DEFAULT_FRAME_ARRAY_DTYPE
 
-    if not _exists(file):
-        raise IOError(file)
-    cap = cv.CaptureFromFile(file)
-    if not cap:
-        raise IOError('CaptureFromFile')
+    if cam_res is None:
+        res = DEFAULT_CAM_PROPERTY_RES
+    else:
+        res = cam_res
+
+    if cam_fps is None:
+        fps = DEFAULT_CAM_PROPERTY_FPS
+    else:
+        fps = cam_fps
+
+    if video_file:
+        if not _exists(video_file):
+            raise IOError(video_file)
+        cap = cv.CaptureFromFile(video_file)
+        if not cap:
+            raise IOError('CaptureFromFile')
+    else:
+        cap = cv.CaptureFromCAM(cam)
+        if not cap:
+            raise IOError('CaptureFromCAM')
+        cam_properties = {
+            'width':    res[0],
+            'height':   res[1],
+            'fps':      fps,
+        }
+        _set_cam_properties(cap, cam_properties)
 
     while True:
         img = cv.QueryFrame(cap)
@@ -151,9 +178,24 @@ def get_frames(file, as_array=True, dtype=None, normal=False):
             break
         if as_array:
             img = _cv_to_array(img, dtype=dtype)
-            if normal:
-                utils.normalize(img)
+            utils.normalize(img)
+            img = utils.swap_rgb(img, _OCV_RGB)
         yield img
+
+
+def _get_video_properties(filename):
+    cap = cv.CaptureFromFile(filename)
+    if not cap:
+        raise IOError('CaptureFromFile')
+    fps = cv.GetCaptureProperty(cap, cv.CV_CAP_PROP_FPS)
+    width = cv.GetCaptureProperty(cap, cv.CV_CAP_PROP_FRAME_WIDTH)
+    height = cv.GetCaptureProperty(cap, cv.CV_CAP_PROP_FRAME_HEIGHT)
+    fps = float(fps)
+    fps = min(fps, 30.0)
+    fps = max(fps, 15.0)
+    width = int(width)
+    height = int(height)
+    return (fps, width, height)
 
 
 if __name__ == '__main__':
