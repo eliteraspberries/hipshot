@@ -34,5 +34,5 @@ _setup_args = {
 
 if __name__ == '__main__':
 
-    setup(packages=['hipshot'], scripts=['scripts/hipshot'],
+    setup(packages=['avena', 'hipshot'], scripts=['scripts/hipshot'],
           **_setup_args)
