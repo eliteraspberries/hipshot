@@ -1,1 +1,4 @@
-__all__ = ['cvutils', 'hipshot', 'utils']
+__all__ = [
+    'avena',
+    'hipshot',
+]
