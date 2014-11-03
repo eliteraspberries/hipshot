@@ -77,20 +77,20 @@ def _cv_to_array(im, dtype=None):
     '''
     arr_data = im[:, :]
     arr_shape = (im.height, im.width, im.nChannels)
-    arr_dtype = np._np_dtypes[_cv_depths[im.depth]]
+    if dtype is None:
+        arr_dtype = np._np_dtypes[_cv_depths[im.depth]]
+    else:
+        arr_dtype = np._np_dtypes[dtype]
     arr = asarray(arr_data, dtype=arr_dtype)
     arr.shape = arr_shape
-    if not dtype:
-        return arr
-    dtype = np._np_dtypes[dtype]
-    arr = np.from_uint8(arr, dtype=dtype)
     return arr
 
 
 def _array_to_cv(arr):
     '''Return a NumPy array as an OpenCV image object.
     '''
-    im_channels = utils.n_channels(arr)
+    utils.swap_rgb(arr, utils._PREFERRED_RGB, to=_OCV_RGB)
+    im_channels = utils.depth(arr)
     swap = lambda x, y, z=1: (y, x)
     im_shape = swap(*arr.shape)
     im_size = arr.dtype.itemsize * im_channels * im_shape[0]
@@ -178,8 +178,8 @@ def get_frames(video_file=None,
             break
         if as_array:
             img = _cv_to_array(img, dtype=dtype)
-            utils.normalize(img)
-            img = utils.swap_rgb(img, _OCV_RGB)
+            np.normalize(img)
+            utils.swap_rgb(img, _OCV_RGB, to=utils._PREFERRED_RGB)
         yield img
 
 
