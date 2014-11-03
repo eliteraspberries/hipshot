@@ -23,20 +23,22 @@ except ImportError:
 from os.path import exists
 from sys import exit, float_info, stderr
 
-from avena import ocv
+from avena import image, ocv
 from hipshot import hipshot
 
 
 long_version = 'Hipshot ' + hipshot.__version__
+
+_EXT = '.png'
 
 
 if '__main__' in __name__:
 
     arguments = docopt(__doc__, version=long_version)
 
-    file = arguments['<file>']
-    if not exists(file):
-        print>>stderr, 'error: file does not exist:', file
+    filename = arguments['<file>']
+    if not exists(filename):
+        print>>stderr, 'error: file does not exist:', filename
         exit(EX_NOINPUT)
 
     if arguments['--weight']:
@@ -46,15 +48,17 @@ if '__main__' in __name__:
             print>>stderr, 'error: alpha value must be a float'
             exit(EX_USAGE)
     else:
-        alpha = 5e-3 / ocv.num_frames(file)
+        alpha = 5e-3 / ocv.num_frames(filename)
     eps = float_info.epsilon
     if alpha <= 10.0 * eps or alpha >= 1.0 - 10.0 * eps:
         print>>stderr, 'error: alpha value must be between 0 and 1'
         exit(EX_USAGE)
 
     try:
+        frames = ocv.get_frames(video_file=filename, as_array=True)
         cv.NamedWindow('Hipshot', flags=cv.CV_WINDOW_AUTOSIZE)
-        print hipshot.merge(file, alpha, display='Hipshot')
+        merged_frames = hipshot.merge(frames, alpha, display='Hipshot')
+        print image.save(merged_frames, filename, random=True, ext=_EXT)
     except IOError:
         print>>stderr, 'error: could not read or write file(s)'
         exit(EX_DATAERR)

@@ -5,8 +5,9 @@ simulating a long-exposure photograph.
 '''
 
 import cv
+from numpy import copy
 
-from avena import ocv
+from avena import image, np, ocv
 
 
 __author__ = 'Mansour Moufid'
@@ -20,27 +21,25 @@ __status__ = 'Development'
 _EXT = '.png'
 
 
-def merge(file, alpha, display=None):
-    '''Average the frames of a file with a weight of alpha,
+def merge(frames, alpha, display=None):
+    '''Average a list of frames with a weight of alpha,
     optionally display the process in an OpenCV NamedWindow.
     '''
-    acc = None
-    frames = ocv.get_frames(file, as_array=False)
+    first = frames.next()
+    acc = first * alpha
     for frame in frames:
-        if not acc:
-            acc = ocv._template_image(frame, cv.IPL_DEPTH_32F)
-        cv.RunningAvg(frame, acc, alpha)
+        acc += frame * alpha
         if display:
-            cv.ShowImage(display, acc)
+            display_acc = copy(acc)
+            display_acc = ocv._array_to_cv(display_acc)
+            cv.ShowImage(display, display_acc)
             k = cv.WaitKey(1)
             k = k & 255
             if k == ord('q'):
                 break
             elif k == ord('z'):
-                cv.SetZero(acc)
-            elif k == ord('s'):
-                print ocv._save_image(acc, file, random=True, ext=_EXT)
-    return ocv._save_image(acc, file, random=True, ext=_EXT)
+                acc.fill(0)
+    return acc
 
 
 if __name__ == '__main__':
