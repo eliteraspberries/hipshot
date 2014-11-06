@@ -3,12 +3,11 @@
 '''Hipshot - Simulate long-exposure photography
 
 Usage:
-    hipshot <file> [--weight <alpha>]
+    hipshot <file>
     hipshot -h | --help
     hipshot -v | --version
 
 Options:
-    -w, --weight    Sum frames with the specified weight.
     -h, --help      Print this help.
     -v, --version   Print version information.
 '''
@@ -41,19 +40,7 @@ if '__main__' in __name__:
         print>>stderr, 'error: file does not exist:', filename
         exit(EX_NOINPUT)
 
-    if arguments['--weight']:
-        try:
-            alpha = float(arguments['<alpha>'])
-        except ValueError:
-            print>>stderr, 'error: alpha value must be a float'
-            exit(EX_USAGE)
-    else:
-        alpha = 1.0 / ocv.num_frames(filename)
-    eps = float_info.epsilon
-    if alpha <= 10.0 * eps or alpha >= 1.0 - 10.0 * eps:
-        print>>stderr, 'error: alpha value must be between 0 and 1'
-        exit(EX_USAGE)
-
+    alpha = 1.0 / ocv.num_frames(filename)
     utils._PREFERRED_RGB = ocv._OCV_RGB
 
     try:

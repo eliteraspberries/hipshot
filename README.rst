@@ -31,19 +31,16 @@ or with pip,
 Usage
 =====
 
-The hipshot script takes a single argument: the name of a video
-file; and an optional argument given by the option ``--weight``
-which specifies the weighing factor for each frame in the sum.
+The hipshot script takes a single argument: the video file.
 
 ::
 
     Hipshot - Simulate long-exposure photography
 
     Usage:
-        hipshot <file> [--weight <alpha>]
+        hipshot <file>
 
     Options:
-        -w, --weight    Sum frames with the specified weight.
         -v, --version   Print version information.
         -h, --help      Print this help.
 
