@@ -49,7 +49,7 @@ if '__main__' in __name__:
         alpha = 1.0 / ocv.num_frames(filename)
     elif arguments['photos']:
         utils._PREFERRED_RGB = image._PIL_RGB
-        frames = (image.read(f, normalize=False) for f in filenames)
+        frames = (image.read(f) for f in filenames)
         alpha = 1.0 / len(filenames)
 
     if arguments['--display'] == 'True':
