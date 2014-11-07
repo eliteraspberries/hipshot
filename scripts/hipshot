@@ -36,7 +36,6 @@ _EXT = '.png'
 if '__main__' in __name__:
 
     arguments = docopt(__doc__, version=long_version)
-    print arguments
 
     filenames = arguments['<file>']
     if not all(map(exists, filenames)):
