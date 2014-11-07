@@ -18,8 +18,8 @@ Hipshot consists of a package and a script.
 
 To install them,
 
-    gunzip < Hipshot-0.4.3.tar.gz | tar -xf -
-    cd Hipshot-0.4.3/
+    gunzip < Hipshot-0.5.tar.gz | tar -xf -
+    cd Hipshot-0.5/
     python setup.py install
 
 or with pip,
@@ -35,11 +35,15 @@ The hipshot script takes a single argument: the video file.
     Hipshot - Simulate long-exposure photography
 
     Usage:
-        hipshot <file>
+        hipshot video <file> [--display=<bool>]
+        hipshot photos <file>... [--display=<bool>]
+        hipshot -h | --help
+        hipshot -v | --version
 
     Options:
-        -v, --version   Print version information.
-        -h, --help      Print this help.
+        -d, --display=<bool>    Display the process [default: True].
+        -h, --help              Print this help.
+        -v, --version           Print version information.
 
 
 Example
