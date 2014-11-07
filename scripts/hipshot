@@ -3,13 +3,15 @@
 '''Hipshot - Simulate long-exposure photography
 
 Usage:
-    hipshot <file>
+    hipshot video <file> [--display=<bool>]
+    hipshot photos <file>... [--display=<bool>]
     hipshot -h | --help
     hipshot -v | --version
 
 Options:
-    -h, --help      Print this help.
-    -v, --version   Print version information.
+    -d, --display=<bool>    Display the process [default: True].
+    -h, --help              Print this help.
+    -v, --version           Print version information.
 '''
 
 
@@ -34,20 +36,38 @@ _EXT = '.png'
 if '__main__' in __name__:
 
     arguments = docopt(__doc__, version=long_version)
+    print arguments
 
-    filename = arguments['<file>']
-    if not exists(filename):
-        print>>stderr, 'error: file does not exist:', filename
+    filenames = arguments['<file>']
+    if not all(map(exists, filenames)):
+        print>>stderr, 'error: a file does not exist'
         exit(EX_NOINPUT)
+    filename = filenames[0]
 
-    alpha = 1.0 / ocv.num_frames(filename)
-    utils._PREFERRED_RGB = ocv._OCV_RGB
+    if arguments['video']:
+        utils._PREFERRED_RGB = ocv._OCV_RGB
+        frames = ocv.get_frames(video_file=filename, as_array=True)
+        alpha = 1.0 / ocv.num_frames(filename)
+    elif arguments['photos']:
+        utils._PREFERRED_RGB = image._PIL_RGB
+        frames = (image.read(f, normalize=False) for f in filenames)
+        alpha = 1.0 / len(filenames)
+
+    if arguments['--display'] == 'True':
+        display = 'Hipshot'
+        cv.NamedWindow(display, flags=cv.CV_WINDOW_AUTOSIZE)
+    else:
+        display = None
 
     try:
-        frames = ocv.get_frames(video_file=filename, as_array=True)
-        cv.NamedWindow('Hipshot', flags=cv.CV_WINDOW_AUTOSIZE)
-        merged_frames = hipshot.merge(frames, alpha, display='Hipshot')
-        print image.save(merged_frames, filename, random=True, ext=_EXT)
+        merged_frames = hipshot.merge(frames, alpha, display=display)
+        print image.save(
+            merged_frames,
+            filename,
+            random=True,
+            ext=_EXT,
+            normalize=True,
+        )
     except IOError:
         print>>stderr, 'error: could not read or write file(s)'
         exit(EX_DATAERR)
