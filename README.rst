@@ -19,8 +19,8 @@ To install them,
 
 ::
 
-    gunzip < Hipshot-0.5.tar.gz | tar -xf -
-    cd Hipshot-0.5/
+    gunzip < Hipshot-0.6.tar.gz | tar -xf -
+    cd Hipshot-0.6/
     python setup.py install
 
 or with pip,
