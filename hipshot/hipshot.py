@@ -7,7 +7,7 @@ a single image simulating a long-exposure photograph.
 import cv
 from numpy import copy
 
-from avena import image, np, ocv
+from avena import image, np, video
 
 
 __author__ = 'Mansour Moufid'
@@ -31,7 +31,7 @@ def merge(frames, alpha, display=None):
         acc += frame * alpha
         if display:
             display_acc = copy(acc)
-            display_acc = ocv._array_to_cv(display_acc)
+            display_acc = video._array_to_cv(display_acc)
             cv.ShowImage(display, display_acc)
             k = cv.WaitKey(1)
             k = k & 255

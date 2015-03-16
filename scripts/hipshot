@@ -24,7 +24,7 @@ except ImportError:
 from os.path import exists
 from sys import exit, float_info, stderr
 
-from avena import image, ocv, utils
+from avena import image, utils, video
 from hipshot import hipshot
 
 
@@ -44,9 +44,9 @@ if '__main__' in __name__:
     filename = filenames[0]
 
     if arguments['video']:
-        utils._PREFERRED_RGB = ocv._OCV_RGB
-        frames = ocv.get_frames(video_file=filename, as_array=True)
-        alpha = 1.0 / ocv.num_frames(filename)
+        utils._PREFERRED_RGB = video._OCV_RGB
+        frames = video.get_frames(video_file=filename, as_array=True)
+        alpha = 1.0 / video.num_frames(filename)
     elif arguments['photos']:
         utils._PREFERRED_RGB = image._PIL_RGB
         frames = (image.read(f) for f in filenames)
