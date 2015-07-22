@@ -1,6 +1,9 @@
 Hipshot converts a video file or series of photographs into a
 single image simulating a long-exposure photograph.
 
+.. figure:: https://travis-ci.org/eliteraspberries/hipshot.svg
+   :alt: 
+
 Installation
 ============
 
@@ -53,10 +56,8 @@ Example
 =======
 
 The following image was created from the video: `ISS Near
-Aurora Borealis <http://www.youtube.com/watch?v=uYBYIhH4nsg>`_.
+Aurora
+Borealis <http://www.youtube.com/watch?v=uYBYIhH4nsg>`__.
 
 .. figure:: http://www.eliteraspberries.com/images/iss-borealis.png
-   :align: center
    :alt: 
-
-
