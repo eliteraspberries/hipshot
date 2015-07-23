@@ -25,7 +25,7 @@ def merge(frames, alpha, display=None):
     '''Average a list of frames with a weight of alpha,
     optionally display the process in an OpenCV NamedWindow.
     '''
-    first = frames.next()
+    first = next(frames)
     acc = first * alpha
     for frame in frames:
         acc += frame * alpha

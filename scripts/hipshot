@@ -15,6 +15,7 @@ Options:
 '''
 
 
+from __future__ import print_function
 import cv
 from docopt import docopt
 try:
@@ -39,7 +40,7 @@ if '__main__' in __name__:
 
     filenames = arguments['<file>']
     if not all(map(exists, filenames)):
-        print>>stderr, 'error: a file does not exist'
+        print('error: a file does not exist', file=stderr)
         exit(EX_NOINPUT)
     filename = filenames[0]
 
@@ -60,13 +61,13 @@ if '__main__' in __name__:
 
     try:
         merged_frames = hipshot.merge(frames, alpha, display=display)
-        print image.save(
+        print(image.save(
             merged_frames,
             filename,
             random=True,
             ext=_EXT,
             normalize=True,
-        )
+        ))
     except IOError:
-        print>>stderr, 'error: could not read or write file(s)'
+        print('error: could not read or write file(s)', file=stderr)
         exit(EX_DATAERR)
