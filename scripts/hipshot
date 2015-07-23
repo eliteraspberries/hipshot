@@ -23,7 +23,7 @@ try:
 except ImportError:
     EX_DATAERR, EX_NOINPUT, EX_USAGE = 1, 2, 3
 from os.path import exists
-from sys import exit, float_info, stderr
+from sys import exit, stderr
 
 from avena import image, utils, video
 from hipshot import hipshot
