@@ -1,7 +1,7 @@
 Hipshot converts a video file or series of photographs into a
 single image simulating a long-exposure photograph.
 
-|image0|
+|image0| |image1|
 
 Installation
 ============
@@ -63,3 +63,5 @@ Borealis <http://www.youtube.com/watch?v=uYBYIhH4nsg>`__.
 
 .. |image0| image:: https://travis-ci.org/eliteraspberries/hipshot.svg
    :target: https://travis-ci.org/eliteraspberries/hipshot
+.. |image1| image:: https://img.shields.io/pypi/v/Hipshot.svg
+   :target: https://pypi.python.org/pypi/Hipshot
