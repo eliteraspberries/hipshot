@@ -16,7 +16,7 @@ Options:
 
 
 from __future__ import print_function
-import cv
+from cv2 import cv
 from docopt import docopt
 try:
     from os import EX_DATAERR, EX_NOINPUT, EX_USAGE

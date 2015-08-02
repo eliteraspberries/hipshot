@@ -4,7 +4,7 @@
 a single image simulating a long-exposure photograph.
 '''
 
-import cv
+from cv2 import cv
 from numpy import copy
 
 from avena import image, np, video
