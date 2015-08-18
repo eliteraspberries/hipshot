@@ -3,13 +3,14 @@
 '''Hipshot - Simulate long-exposure photography
 
 Usage:
-    hipshot video <file> [--display=<bool>]
-    hipshot photos <file>... [--display=<bool>]
+    hipshot [options] video <file>
+    hipshot [options] photos <file>...
     hipshot -h | --help
     hipshot -v | --version
 
 Options:
-    -d, --display=<bool>    Display the process [default: True].
+    --display               Display the merging process.
+    --no-display
     -h, --help              Print this help.
     -v, --version           Print version information.
 '''
@@ -53,11 +54,11 @@ if '__main__' in __name__:
         frames = (image.read(f) for f in filenames)
         alpha = 1.0 / len(filenames)
 
-    if arguments['--display'] == 'True':
+    if arguments['--no-display']:
+        display = None
+    else:
         display = 'Hipshot'
         cv.NamedWindow(display, flags=cv.CV_WINDOW_AUTOSIZE)
-    else:
-        display = None
 
     try:
         merged_frames = hipshot.merge(frames, alpha, display=display)
