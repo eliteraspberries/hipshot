@@ -31,6 +31,7 @@ def merge(frames, alpha, display=None):
         acc += frame * alpha
         if display:
             display_acc = copy(acc)
+            np.normalize(display_acc)
             display_acc = video._array_to_cv(display_acc)
             cv.ShowImage(display, display_acc)
             k = cv.WaitKey(1)
