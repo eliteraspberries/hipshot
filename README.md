@@ -21,8 +21,8 @@ Hipshot consists of a package and a script.
 
 To install them,
 
-    gunzip < Hipshot-0.7.tar.gz | tar -xf -
-    cd Hipshot-0.7/
+    gunzip < Hipshot-0.8.tar.gz | tar -xf -
+    cd Hipshot-0.8/
     python setup.py install
 
 or with pip,

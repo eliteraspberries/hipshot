@@ -13,7 +13,7 @@ from avena import image, np, video
 __author__ = 'Mansour Moufid'
 __copyright__ = 'Copyright 2013-2015, Mansour Moufid'
 __license__ = 'ISC'
-__version__ = '0.7'
+__version__ = '0.8'
 __email__ = 'mansourmoufid@gmail.com'
 __status__ = 'Development'
 
