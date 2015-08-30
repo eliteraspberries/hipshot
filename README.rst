@@ -10,8 +10,7 @@ Hipshot requires:
 
 -  Python 2;
 -  docopt;
--  NumPy;
--  the Python Imaging Library (PIL) or the Pillow fork;
+-  the `Avena <https://pypi.python.org/pypi/Avena>`__ library;
 -  the FFMPEG libraries; and
 -  OpenCV and its Python bindings.
 

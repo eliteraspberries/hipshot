@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 
-from distutils.core import setup
+try:
+    from setuptools import setup
+except ImportError:
+    from distutils.core import setup
 
 from hipshot import hipshot
 
@@ -31,8 +34,15 @@ _setup_args = {
     'version':          hipshot.__version__,
 }
 
+_requirements = [
+    'Avena',
+    'docopt',
+]
+
+_setup_args['install_requires'] = _requirements
+
 
 if __name__ == '__main__':
 
-    setup(packages=['avena', 'hipshot'], scripts=['scripts/hipshot'],
+    setup(packages=['hipshot'], scripts=['scripts/hipshot'],
           **_setup_args)

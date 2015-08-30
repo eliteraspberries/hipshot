@@ -12,8 +12,7 @@ Hipshot requires:
 
   - Python 2;
   - docopt;
-  - NumPy;
-  - the Python Imaging Library (PIL) or the Pillow fork;
+  - the [Avena][] library;
   - the FFMPEG libraries; and
   - OpenCV and its Python bindings.
 
@@ -57,7 +56,7 @@ The following image was created from the video:
 
 ![][iss-image]
 
-
+[Avena]: https://pypi.python.org/pypi/Avena
 [iss-image]: http://www.eliteraspberries.com/images/iss-borealis.png
 [iss-video]: <http://www.youtube.com/watch?v=uYBYIhH4nsg>
 [build-status]: https://travis-ci.org/eliteraspberries/hipshot
