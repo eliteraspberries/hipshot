@@ -19,6 +19,7 @@ Options:
 from __future__ import print_function
 from cv2 import cv
 from docopt import docopt
+from numpy import copy
 try:
     from os import EX_DATAERR, EX_NOINPUT, EX_USAGE
 except ImportError:
@@ -26,13 +27,35 @@ except ImportError:
 from os.path import exists
 from sys import exit, stderr
 
-from avena import image, utils, video
+from avena import image, np, utils, video
 from hipshot import hipshot
 
 
 long_version = 'Hipshot ' + hipshot.__version__
 
 _EXT = '.png'
+
+
+def merge(frames, alpha, display=None):
+    '''Average a list of frames with a weight of alpha,
+    optionally display the process in an OpenCV NamedWindow.
+    '''
+    first = next(frames)
+    acc = first * alpha
+    for frame in frames:
+        acc += frame * alpha
+        if display:
+            display_acc = copy(acc)
+            np.normalize(display_acc)
+            display_acc = video._array_to_cv(display_acc)
+            cv.ShowImage(display, display_acc)
+            k = cv.WaitKey(1)
+            k = k & 255
+            if k == ord('q'):
+                break
+            elif k == ord('z'):
+                acc.fill(0)
+    return acc
 
 
 if '__main__' in __name__:
@@ -61,7 +84,7 @@ if '__main__' in __name__:
         cv.NamedWindow(display, flags=cv.CV_WINDOW_AUTOSIZE)
 
     try:
-        merged_frames = hipshot.merge(frames, alpha, display=display)
+        merged_frames = merge(frames, alpha, display=display)
         print(image.save(
             merged_frames,
             filename,
