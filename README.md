@@ -16,15 +16,7 @@ Hipshot requires:
   - the FFMPEG libraries; and
   - OpenCV and its Python bindings.
 
-Hipshot consists of a package and a script.
-
-To install them,
-
-    gunzip < Hipshot-0.8.tar.gz | tar -xf -
-    cd Hipshot-0.8/
-    python setup.py install
-
-or with pip,
+Install Hipshot with [pip][]:
 
     pip install hipshot
 
@@ -57,6 +49,7 @@ The following image was created from the video:
 ![][iss-image]
 
 [Avena]: https://pypi.python.org/pypi/Avena
+[pip]: https://pip.pypa.io/en/stable/
 [iss-image]: http://www.eliteraspberries.com/images/iss-borealis.png
 [iss-video]: <http://www.youtube.com/watch?v=uYBYIhH4nsg>
 [build-status]: https://travis-ci.org/eliteraspberries/hipshot
