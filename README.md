@@ -3,6 +3,7 @@ a single image simulating a long-exposure photograph.
 
 [![](https://travis-ci.org/eliteraspberries/hipshot.svg)][build-status]
 [![](https://img.shields.io/pypi/v/Hipshot.svg)][pypi]
+![](https://img.shields.io/github/license/eliteraspberries/hipshot.svg)
 
 
 Installation
