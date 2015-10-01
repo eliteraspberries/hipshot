@@ -30,13 +30,14 @@ The hipshot script takes a single argument: the video file.
     Hipshot - Simulate long-exposure photography
 
     Usage:
-        hipshot video <file> [--display=<bool>]
-        hipshot photos <file>... [--display=<bool>]
+        hipshot [options] video <file>
+        hipshot [options] photos <file>...
         hipshot -h | --help
         hipshot -v | --version
 
     Options:
-        -d, --display=<bool>    Display the process [default: True].
+        --display               Display the merging process.
+        --no-display
         -h, --help              Print this help.
         -v, --version           Print version information.
 
